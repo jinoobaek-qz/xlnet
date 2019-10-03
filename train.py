@@ -23,6 +23,8 @@ flags.DEFINE_string("master", default=None,
       help="master")
 flags.DEFINE_bool("debug", default=False,
                     help="debug")
+flags.DEFINE_string("debug_dump_dir", default=None,
+                    help="debug_dump_dir")
 flags.DEFINE_string("tpu", default=None,
       help="The Cloud TPU to use for training. This should be either the name "
       "used when creating the Cloud TPU, or a grpc://ip.address.of.tpu:8470 url.")
@@ -288,7 +290,10 @@ def main(unused_argv):
 
   hooks = None
   if FLAGS.debug:
-    hooks = [tf_debug.LocalCLIDebugHook()]
+    if FLAGS.debug_dump_dir:
+      hooks = [tf_debug.DumpingDebugHook(FLAGS.debug_dump_dir)]
+    else:
+      hooks = [tf_debug.LocalCLIDebugHook()]
   #### Training
   estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps, hooks=hooks)
 
