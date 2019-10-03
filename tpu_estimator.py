@@ -31,6 +31,7 @@ import six
 from six.moves import queue as Queue  # pylint: disable=redefined-builtin
 from six.moves import xrange  # pylint: disable=redefined-builtin
 
+import tensorflow as tf
 from tensorflow.contrib.tpu.proto import compilation_result_pb2 as tpu_compilation_result
 from tensorflow.contrib.tpu.python.tpu import tensor_tracer
 from tensorflow.contrib.tpu.python.ops import tpu_ops
@@ -3164,6 +3165,8 @@ class _Inputs(object):
                            'before calling features_and_labels(). Please file '
                            'a bug!')
       return _Inputs._parse_inputs(self._iterator.get_next())
+
+    tf.logging.info('features: {}'.format(self._features))
 
     return (self._features, self._labels)
 
