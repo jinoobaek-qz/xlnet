@@ -12,6 +12,7 @@ import absl.logging as _logging  # pylint: disable=unused-import
 import numpy as np
 
 import tensorflow as tf
+from tensorflow.python import debug as tf_debug
 import model_utils
 import tpu_estimator
 import function_builder
@@ -20,6 +21,8 @@ import data_utils
 # TPU parameters
 flags.DEFINE_string("master", default=None,
       help="master")
+flags.DEFINE_string("debug", default=False,
+                    help="debug")
 flags.DEFINE_string("tpu", default=None,
       help="The Cloud TPU to use for training. This should be either the name "
       "used when creating the Cloud TPU, or a grpc://ip.address.of.tpu:8470 url.")
@@ -273,6 +276,7 @@ def main(unused_argv):
   # TPU Configuration
   run_config = model_utils.configure_tpu(FLAGS)
 
+  hooks = [tf_debug.LocalCLIDebugHook()]
   # TPU Estimator
   estimator = tpu_estimator.TPUEstimator(
       model_fn=model_fn,
@@ -284,7 +288,7 @@ def main(unused_argv):
       eval_on_tpu=FLAGS.use_tpu)
 
   #### Training
-  estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps)
+  estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps, hooks=hooks)
 
 
 if __name__ == "__main__":
