@@ -21,7 +21,7 @@ import data_utils
 # TPU parameters
 flags.DEFINE_string("master", default=None,
       help="master")
-flags.DEFINE_string("debug", default=False,
+flags.DEFINE_bool("debug", default=False,
                     help="debug")
 flags.DEFINE_string("tpu", default=None,
       help="The Cloud TPU to use for training. This should be either the name "
