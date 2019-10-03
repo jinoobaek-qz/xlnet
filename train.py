@@ -276,7 +276,6 @@ def main(unused_argv):
   # TPU Configuration
   run_config = model_utils.configure_tpu(FLAGS)
 
-  hooks = [tf_debug.LocalCLIDebugHook()]
   # TPU Estimator
   estimator = tpu_estimator.TPUEstimator(
       model_fn=model_fn,
@@ -287,6 +286,9 @@ def main(unused_argv):
       train_batch_size=FLAGS.train_batch_size,
       eval_on_tpu=FLAGS.use_tpu)
 
+  hooks = None
+  if FLAGS.debug:
+    hooks = [tf_debug.LocalCLIDebugHook()]
   #### Training
   estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps, hooks=hooks)
 
