@@ -3166,7 +3166,7 @@ class _Inputs(object):
                            'a bug!')
       return _Inputs._parse_inputs(self._iterator.get_next())
 
-    tf.logging.info('features: {}'.format(self._features))
+    tf.logging.debug('features: {}'.format(self._features))
 
     return (self._features, self._labels)
 
